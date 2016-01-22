@@ -1,0 +1,5 @@
+packages/
+FileUpload/obj/Debug/
+FileUpload/bin/
+FileUpload.Tests/bin/Debug/
+FileUpload.Tests/obj/

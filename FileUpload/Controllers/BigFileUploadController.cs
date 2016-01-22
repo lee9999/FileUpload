@@ -20,22 +20,17 @@ namespace FileUpload.Controllers
         //解决文件上传最大4M的显示可在web.config中设置，当前设置，最大上传大小2GB，最大上传时间一小时
         public ActionResult BigFileUp(string guid, string chunks, string chunk, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
-            //lock对象
-            //object lockObject=new object();//多线程锁对象
-
-            //int isOk;
-
+            object lockObj = null;
+            
             if (Request.Files.Count == 0)
             {
                 return HttpNotFound();
             }
 
+            
 
-
-
-            //需要一个没有分块直接保存的判断！！！
-
-
+            string ex = Path.GetExtension(file.FileName);
+            string filePathName = String.Empty;
 
 
 
@@ -52,10 +47,19 @@ namespace FileUpload.Controllers
             }
             else
             {
-                return HttpNotFound();
+                //文件没有分块直接保存
+                //return HttpNotFound();
+                filePathName = Guid.NewGuid().ToString("N") + ex;
+                file.SaveAs(Path.Combine(HttpRuntime.AppDomainAppPath+ "\\Upload", filePathName));
+                return Json(new
+                {
+                    jsonrpc = "2.0",
+                    id = id,
+                    filePath = "/Upload/" + filePathName
+                });
             }
 
-            string filePathName = String.Empty;
+            
             string tempPath = "Upload";
             if (guid != null)
             {
@@ -63,7 +67,7 @@ namespace FileUpload.Controllers
             }
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, tempPath);//保存的路径
 
-            string ex = Path.GetExtension(file.FileName);
+            
             //没有做文件类型验证
             //filePathName = Guid.NewGuid().ToString("N") + ex;
             filePathName = "temp" + xuhao.ToString() + ex;
@@ -93,7 +97,8 @@ namespace FileUpload.Controllers
                 //    id = "id"
                 //});
             }
-            finally
+            //finally
+            if(xuhao==0)
             {
                 //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！
                 
@@ -152,6 +157,17 @@ namespace FileUpload.Controllers
                         fileTemp.Flush();
                         //fileTemp.Close();
                         fileTemp.Dispose();
+
+
+
+
+
+
+
+                        if (i == count - 1)
+                        {
+                            TempFolder.Delete(true);//删除temp目录 
+                        }
                     }
                     
 

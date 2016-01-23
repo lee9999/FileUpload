@@ -79,3 +79,4 @@ uploader.on( 'uploadBeforeSend', function( block, data ) {
 		
 		
 		秒传和断点续传讨论https://github.com/fex-team/webuploader/issues/142
+		

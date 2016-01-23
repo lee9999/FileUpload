@@ -47,7 +47,7 @@
                 chunkSize: 10 * 1024 * 1024,
                 threads: 5, //上传并发数
                 formData: { guid: WebUploader.guid() },  //一个文件有一个guid，在服务器端合并成一个文件  这里有个问题，多个文件或者上传一个文件成功后不刷新直接添加文件上传生成的guid不变！！！   暂时只能传一个大文件
-                
+                fileNumLimit :1,
                 fileSizeLimit: 2000 * 1024 * 1024,
                 fileSingleSizeLImit: 200 * 1024 * 1024,
                 //由于http的无状态特性，向
@@ -137,23 +137,26 @@
 
 </head>
 <body>
-    <div class="container" style="margin-top: 50px">
-        <div id="uploader" class="container">
-            <div class="container">
-                <div id="fileList" class="uploader-list"></div> <!--存放文件的容器-->
-            </div>
-            <div class="btns container">
-                <div id="picker" class="webuploader-container" style="float: left; margin-right: 10px">
-                    <div>
-                        选择文件
-                        <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
-                    </div>
+<div class="container" style="margin-top: 20px">
+    <div class="alert alert-info">只允许一次上传一个大文件</div>
+</div>
+<div class="container" style="margin-top: 50px">
+    <div id="uploader" class="container">
+        <div class="container">
+            <div id="fileList" class="uploader-list"></div> <!--存放文件的容器-->
+        </div>
+        <div class="btns container">
+            <div id="picker" class="webuploader-container" style="float: left; margin-right: 10px">
+                <div>
+                    选择文件
+                    <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
                 </div>
-
-                <div id="UploadBtn" class="webuploader-pick" style="float: left">开始上传</div>
             </div>
+
+            <div id="UploadBtn" class="webuploader-pick" style="float: left">开始上传</div>
         </div>
     </div>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,41 @@
+在初始化以后全局添加某些参数有两种方式：https://github.com/fex-team/webuploader/issues/145
+
+直接修改实例的options属性。
+
+uploader.options.formData.uid = 123;
+通过option方法
+
+uploader.option('formData', {
+  uid: 123
+});
+
+// 初始化的时候直接添加
+var uploader = new WebUploader.Uploader({
+    ...
+    formData: {
+        uid: 123
+    }
+    ...
+});
+
+// 初始化以后添加
+uploader.options.formData.uid = 123;
+
+给每个独立的文件上传设置。通过绑定一个uploadBeforeSend事件来添加。
+
+uploader.on( 'uploadBeforeSend', function( block, data ) {
+    // block为分块数据。
+
+    // file为分块对应的file对象。
+    var file = block.file;
+
+
+    // 修改data可以控制发送哪些携带数据。
+    data.uid = 123;
+
+    // 将存在file对象中的md5数据携带发送过去。
+    // data.fileMd5 = file.md5;
+
+    // 删除其他数据
+    // delete data.key;
+});

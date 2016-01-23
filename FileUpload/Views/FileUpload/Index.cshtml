@@ -61,6 +61,7 @@
                     '<h4 class="info">' + file.name + '<button type="button" fileId="' + file.id + '" class="btn btn-danger btn-delete"><span class="glyphicon glyphicon-trash"></span></button></h4>' +
                     '<p class="state">等待上传...</p>' +
                     '</div>');//id="' + file.id + 'btn"
+                //删除要上传的文件
                 //每次添加文件都给btn-delete绑定删除方法
                 $(".btn-delete").click(function () {
                     //console.log($(this).attr("fileId"));//拿到文件id
@@ -117,7 +118,6 @@
                 uploader.upload();//上传
             });
 
-            //删除要上传的文件
 
         });
 

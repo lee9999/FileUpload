@@ -72,8 +72,9 @@
                     }
 
                     $img.attr('src', src);
-                 },thumbnailWidth,thumbnailHeight);
-                //每次添加文件都给btn-delete绑定删除方法
+                }, thumbnailWidth, thumbnailHeight);
+                //删除要上传的文件
+                //每次添加文件都给btn-delete绑定删除方法 
                 $(".btn-delete").click(function () {
                     //console.log($(this).attr("fileId"));//拿到文件id
                     uploader.removeFile(uploader.getFile($(this).attr("fileId"), true));
@@ -133,7 +134,7 @@
                 uploader.upload();//上传
             });
 
-            //删除要上传的文件
+            
 
         });
 

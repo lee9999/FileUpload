@@ -138,12 +138,18 @@ namespace FileUpload.Controllers
                         //FileStream fileTemp = new FileStream(localPath + "\\temp"+i+ex, FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
 
                         //解决了文件占用问题
+                        int tryTimes = 0;
                         FileStream fileTemp = null;
                         while (fileTemp == null)
                         {
                             try
                             {
                                 fileTemp = new FileStream(localPath + "\\temp" + i + ex, FileMode.Open, FileAccess.Read);
+                                tryTimes++;
+                                if (tryTimes > 100) //次数大于100就结束等待
+                                {
+                                    return Json(new { error = true });
+                                }
                             }
                             catch (Exception)
                             {

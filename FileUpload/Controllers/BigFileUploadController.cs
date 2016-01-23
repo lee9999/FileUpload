@@ -124,6 +124,9 @@ namespace FileUpload.Controllers
                     //序号从0开始
                     string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");//保存的路径
                     //string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload\\"+guid);//测试：保存的路径
+
+
+                    //下面应该用using块实现
                     FileStream fa = new FileStream(path+"\\"+Guid.NewGuid().ToString()+ex, FileMode.Append, FileAccess.Write);
                     for (int i = 0; i < count; i++)
                     {

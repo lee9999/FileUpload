@@ -45,6 +45,7 @@
 
                 chunked: true, //开启分块上传
                 chunkSize: 10 * 1024 * 1024,
+                chunkRetry :3,//网络问题上传失败后重试次数
                 threads: 5, //上传并发数
                 formData: { guid: WebUploader.guid() },  //一个文件有一个guid，在服务器端合并成一个文件  这里有个问题，多个文件或者上传一个文件成功后不刷新直接添加文件上传生成的guid不变！！！   暂时只能传一个大文件
                 fileNumLimit :1,

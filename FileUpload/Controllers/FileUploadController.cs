@@ -21,8 +21,9 @@ namespace FileUpload.Controllers
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             if (Request.Files.Count == 0)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
                 //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = "id" });
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
             string ex = Path.GetExtension(file.FileName);
             //没有做文件类型验证
@@ -38,13 +39,8 @@ namespace FileUpload.Controllers
             catch (Exception)
             {
                 //异常处理   Log4Net 
-                return HttpNotFound();
-                //return Json(new
-                //{
-                //    jsonrpc = 2.0,
-                //    error = new { code = 102, message = "保存失败" },
-                //    id = "id"
-                //});
+                //return HttpNotFound();
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
             return Json(new
             {

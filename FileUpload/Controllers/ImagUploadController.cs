@@ -25,8 +25,9 @@ namespace FileUpload.Controllers
             if (ex != ".gif" && ex != ".jpg" && ex != ".jpeg" && ex != ".bmp" && ex != ".png")
             {
                 //文件后缀不符合要求
-                return HttpNotFound();
+                //return HttpNotFound();
                 //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = id });//这个错误处理不管用
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
             #endregion
 
@@ -62,8 +63,9 @@ namespace FileUpload.Controllers
             //fs.Close();
             if (fileClass != "7173" && fileClass != "255216" && fileClass != "6677" && fileClass != "13780") //jpe和jpeg fileclass相同
             {
-                return HttpNotFound();//jsonrpc更加轻量，似乎我的用法有问题，解决不了
+                //return HttpNotFound();//jsonrpc更加轻量，似乎我的用法有问题，解决不了
                 //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = id });//这个错误处理不管用
+                return Json(new {error=true});//新的错误返回方式，更加轻量！
             }
 
             #endregion
@@ -72,8 +74,9 @@ namespace FileUpload.Controllers
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             if (Request.Files.Count == 0)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
                 //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = id });
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
 
             filePathName = Guid.NewGuid().ToString("N") + ex;
@@ -88,13 +91,8 @@ namespace FileUpload.Controllers
             catch (Exception)
             {
                 //异常处理   Log4Net 
-                return HttpNotFound();
-                //return Json(new
-                //{
-                //    jsonrpc = 2.0,
-                //    error = new {code = 102, message = "保存失败"},
-                //    id = id
-                //});
+                //return HttpNotFound();
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
             finally
             {

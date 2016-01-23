@@ -19,12 +19,6 @@
     <script type="text/javascript">
         $(function () {
             $list = $('#fileList');
-            //WebUploader实例
-            //console.log(WebUploader.Base.guid());
-            //console.log(WebUploader.guid());
-            //console.log(WebUploader.guid());
-            //console.log(WebUploader.guid());
-            //console.log(WebUploader.guid());
             var uploader = WebUploader.create({
 
 
@@ -45,17 +39,17 @@
 
                 chunked: true, //开启分块上传
                 chunkSize: 10 * 1024 * 1024,
-                chunkRetry :3,//网络问题上传失败后重试次数
+                chunkRetry: 3,//网络问题上传失败后重试次数
                 threads: 5, //上传并发数
                 //formData: { guid: WebUploader.guid() },  //一个文件有一个guid，在服务器端合并成一个文件  这里有个问题，多个文件或者上传一个文件成功后不刷新直接添加文件上传生成的guid不变！！！   暂时只能传一个大文件
                 //fileNumLimit :1,
                 fileSizeLimit: 2000 * 1024 * 1024,
                 fileSingleSizeLImit: 2000 * 1024 * 1024,
-                //由于http的无状态特性，向
-                
-                resize: false
 
-                //选择图片文件
+
+                resize: false//不压缩
+
+                //选择文件类型
                 //accept: {
                 //    title: 'Images',
                 //    extensions: 'gif,jpg,jpeg,bmp,png',
@@ -81,7 +75,19 @@
                     $(this).parent().parent().remove();//DOM上删除了
                 });
 
-                uploader.options.formData.guid = WebUploader.guid();
+                uploader.options.formData.guid = WebUploader.guid();//每个文件都附带一个guid，以在服务端确定哪些文件块本来是一个
+                //uploader.options.formData.md5value = uploader.md5File(file);//, 0, end
+                //console.log(uploader.options.formData.md5value);
+                //console.log(uploader.md5File(file));//, 0, end
+                uploader.md5File(file)
+                .then(function(fileMd5) { // 完成              
+                    //var end = +new Date();
+                    // console.log("before-send-file  preupload: file.size="+file.size+" file.md5="+fileMd5);
+                    //insertLog("<br>" + moment().format("YYYY-MM-DD HH:mm:ss") + " before-send-file  preupload:计算文件(" + file.name + ")MD5完成. 耗时  " + (end - start) + '毫秒  fileMd5: ' + fileMd5);
+                    file.wholeMd5 = fileMd5;//获取到了md5
+                    //alert(file.wholeMd5);
+                });
+
             });
 
             // 文件上传过程中创建进度条实时显示。
@@ -110,7 +116,7 @@
 
 
                 // 修改data可以控制发送哪些携带数据。
-                //data.guid = WebUploader.guid();
+                //data.uid = 123;
 
                 // 将存在file对象中的md5数据携带发送过去。
                 // data.fileMd5 = file.md5;
@@ -147,6 +153,103 @@
             });
 
 
+
+
+
+
+
+
+            // 扩展md5逻辑
+            //var uploader = WebUploader.Uploader;
+
+            /**
+             * method:before-send-file
+             * 在文件发送之前request，此时还没有分片（如果配置了分片的话），可以用来做文件整体md5验证。
+             * para:file: File对象
+             */
+            //uploader.register({
+            //    'before-send-file': 'preupload'
+            //}, {
+            //    preupload: function (file) {
+            //        $('#UploadBtn').attr("disabled", true);
+            //        var me = this,
+            //        owner = this.owner,
+            //        server = me.options.server,
+            //        deferred = WebUploader.Deferred(),
+            //        blob = file.source.getSource();
+
+
+
+            //        //var fileMd5 = file.wholeMd5;
+            //        var start = +new Date();
+            //        var $li = $('#' + file.id),
+            //        $MD5Percent = $li.find('.progress  .progress-bar-info');
+            //        $li.find('span.state').text('计算MD5');
+            //        insertLog("<br>" + moment().format("YYYY-MM-DD HH:mm:ss") + " before-send-file  preupload:开始计算文件(" + file.name + ")MD5. ");
+            //        owner.md5File(file)
+            //        .progress(function (percentage) {   // 及时显示进度
+            //            var percent = parseInt(percentage * 100) + '%';
+            //            $MD5Percent.css('width', percent);
+            //            $MD5Percent.html(percent);
+            //            //console.log('Percentage:', percent);
+            //        })
+            //        .then(function (fileMd5) {   // 完成
+            //            var end = +new Date();
+            //            // console.log("before-send-file  preupload: file.size="+file.size+" file.md5="+fileMd5);
+            //            insertLog("<br>" + moment().format("YYYY-MM-DD HH:mm:ss") + " before-send-file  preupload:计算文件(" + file.name + ")MD5完成. 耗时  " + (end - start) + '毫秒  fileMd5: ' + fileMd5);
+            //            file.wholeMd5 = fileMd5;
+
+            //            $.ajax({
+            //                cache: false,
+            //                type: "post",
+            //                dataType: "json",
+            //                url: baseUrl + "/fileUpload/existsMd5",
+            //                data: {
+            //                    fileMd5: fileMd5,
+            //                    fileName: file.name,
+            //                    isShared: $("#isShared").val()
+            //                },
+            //                success: function (result) {
+
+            //                    $('#uploadBtn').attr("disabled", false);
+            //                    me.options.formData.fileMd5 = fileMd5;
+            //                    me.options.formData.isShared = $("#isShared").val();
+            //                    me.options.formData.fileType = $("#fileType").val();
+            //                    if (result.result) {//文件存在
+            //                        insertLog("<br>" + moment().format("YYYY-MM-DD HH:mm:ss") + " before-send-file  preupload:文件 " + file.name + " 已经存在，跳过上传   fileMd5:" + fileMd5);
+            //                        $MD5Percent.hide();
+            //                        var $li = $('#' + file.id),
+            //                        $percent = $li.find('.progress  .progress-bar-success');
+            //                        $li.find('span.state').text('文件重复，已跳过');
+            //                        $percent.css('width', 100 + '%');
+            //                        owner.skipFile(file);
+            //                    } else {//文件不存在
+            //                        file.wholeMd5 = fileMd5;
+            //                        file.chunkMd5s = result.chunkMd5s;  //如果后台已经有该文件的分片记录
+            //                    }
+
+            //                    // me.data.chunksMd5 = "chunksMd5";
+            //                    $('#' + file.id + ' .cancleBtn').removeClass("btn-info");
+            //                    $('#' + file.id + ' .cancleBtn').attr("disabled", true);
+            //                    deferred.resolve(true);
+            //                    // return deferred.reject();
+            //                }
+            //            });
+            //        });
+
+            //        return deferred.promise();
+            //    }
+            //});
+
+
+
+
+
+
+
+
+
+
         });
 
 
@@ -155,26 +258,26 @@
 
 </head>
 <body>
-@*<div class="container" style="margin-top: 20px">
-    <div class="alert alert-info">只允许一次上传一个大文件</div>
-</div>*@
-<div class="container" style="margin-top: 50px">
-    <div id="uploader" class="container">
-        <div class="container">
-            <div id="fileList" class="uploader-list"></div> <!--存放文件的容器-->
-        </div>
-        <div class="btns container">
-            <div id="picker" class="webuploader-container" style="float: left; margin-right: 10px">
-                <div>
-                    选择文件
-                    <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
-                </div>
+    <div class="container" style="margin-top: 20px">
+        <div class="alert alert-info">可以一次上传多个大文件</div>
+    </div>
+    <div class="container" style="margin-top: 50px">
+        <div id="uploader" class="container">
+            <div class="container">
+                <div id="fileList" class="uploader-list"></div> <!--存放文件的容器-->
             </div>
+            <div class="btns container">
+                <div id="picker" class="webuploader-container" style="float: left; margin-right: 10px">
+                    <div>
+                        选择文件
+                        <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
+                    </div>
+                </div>
 
-            <div id="UploadBtn" class="webuploader-pick" style="float: left">开始上传</div>
+                <div id="UploadBtn" class="webuploader-pick" style="float: left">开始上传</div>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>

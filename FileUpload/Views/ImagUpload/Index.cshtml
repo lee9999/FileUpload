@@ -134,7 +134,15 @@
                 uploader.upload();//上传
             });
 
-            
+            uploader.on('uploadAccept', function (file, response) {
+                //if (uploader.errorCode) {
+                //    // 通过return false来告诉组件，此文件上传有错。
+                //    return false;
+                //}
+                if (response._raw == '{"error":true}') {
+                    return false;
+                }
+            });
 
         });
 

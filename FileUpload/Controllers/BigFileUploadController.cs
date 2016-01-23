@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using FileUpload.Models;
 
 namespace FileUpload.Controllers
 {
@@ -18,16 +20,17 @@ namespace FileUpload.Controllers
 
         // GET: FileUpload
         //解决文件上传最大4M的显示可在web.config中设置，当前设置，最大上传大小2GB，最大上传时间一小时
-        public ActionResult BigFileUp(string guid, string chunks, string chunk, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
+        public ActionResult BigFileUp(string guid, string md5value, string chunks, string chunk, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
             object lockObj = null;
-            
+
             if (Request.Files.Count == 0)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
 
-            
+
 
             string ex = Path.GetExtension(file.FileName);
             string filePathName = String.Empty;
@@ -50,7 +53,13 @@ namespace FileUpload.Controllers
                 //文件没有分块直接保存
                 //return HttpNotFound();
                 filePathName = Guid.NewGuid().ToString("N") + ex;
-                file.SaveAs(Path.Combine(HttpRuntime.AppDomainAppPath+ "\\Upload", filePathName));
+                file.SaveAs(Path.Combine(HttpRuntime.AppDomainAppPath + "\\Upload", filePathName));
+                FileModel model = new FileModel();
+                FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
+                upfile.FileMD5 = md5value;
+                upfile.FileName = filePathName;
+                model.FileInfoSet.Add(upfile);
+                model.SaveChanges();
                 return Json(new
                 {
                     jsonrpc = "2.0",
@@ -59,7 +68,7 @@ namespace FileUpload.Controllers
                 });
             }
 
-            
+
             string tempPath = "Upload";
             if (guid != null)
             {
@@ -67,7 +76,7 @@ namespace FileUpload.Controllers
             }
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, tempPath);//保存的路径
 
-            
+
             //没有做文件类型验证
             //filePathName = Guid.NewGuid().ToString("N") + ex;
             filePathName = "temp" + xuhao.ToString() + ex;
@@ -84,24 +93,19 @@ namespace FileUpload.Controllers
                 //}
                 file.SaveAs(Path.Combine(localPath, filePathName));
                 //isOk = isOk - 1;
-                
+
             }
             catch (Exception)
             {
                 //异常处理   Log4Net 
-                return HttpNotFound();
-                //return Json(new
-                //{
-                //    jsonrpc = 2.0,
-                //    error = new { code = 102, message = "保存失败" },
-                //    id = "id"
-                //});
+                //return HttpNotFound();
+                return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
             //finally
-            if(xuhao==0)
+            if (xuhao == 0)//第一个分块负责上传的进程留下来合并文件
             {
-                //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！
-                
+                //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！（已解决）
+
                 //待文件夹下的文件数目达到分块数目后拼接成一个文件，并删除临时文件
                 //filePathName文件夹
                 int count = 0;
@@ -118,24 +122,24 @@ namespace FileUpload.Controllers
                     //}
                     //lock (lockObject)
                     //{
-                        
+
                     //}
                     //达到合并的要求了
                     //序号从0开始
                     string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");//保存的路径
                     //string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload\\"+guid);//测试：保存的路径
 
-
+                    string filefullname = Guid.NewGuid().ToString() + ex;
                     //下面应该用using块实现
-                    FileStream fa = new FileStream(path+"\\"+Guid.NewGuid().ToString()+ex, FileMode.Append, FileAccess.Write);
+                    FileStream fa = new FileStream(path + "\\" + filefullname, FileMode.Append, FileAccess.Write);
                     for (int i = 0; i < count; i++)
                     {
-                        byte[] buffer=new byte[11*1024*1024];
+                        byte[] buffer = new byte[11 * 1024 * 1024];
                         //FileStream fileTemp = new FileStream(localPath + "\\temp"+i+ex, FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
 
                         //解决了文件占用问题
                         FileStream fileTemp = null;
-                        while(fileTemp == null)
+                        while (fileTemp == null)
                         {
                             try
                             {
@@ -143,12 +147,12 @@ namespace FileUpload.Controllers
                             }
                             catch (Exception)
                             {
-                                
+
                             }
                         }
 
 
-                        int buffersize =Convert.ToInt32(fileTemp.Length) ;
+                        int buffersize = Convert.ToInt32(fileTemp.Length);
 
                         fileTemp.Read(buffer, 0, buffersize);
                         fa.Write(buffer, 0, buffersize);
@@ -171,12 +175,19 @@ namespace FileUpload.Controllers
                         {
                             TempFolder.Delete(true);//删除temp目录 
                         }
+                       
                     }
-                    
 
 
 
 
+                    //将文件信息写入数据库
+                    FileModel model = new FileModel();
+                    FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
+                    upfile.FileMD5 = md5value;
+                    upfile.FileName = filefullname;
+                    model.FileInfoSet.Add(upfile);
+                    model.SaveChanges();
 
                     fa.Flush();
                     //fa.Close();//关闭流
@@ -190,6 +201,26 @@ namespace FileUpload.Controllers
                 filePath = "/Upload/" + filePathName
             });
 
+        }
+
+
+        public ActionResult IsMD5Exist(string fileMd5, string fileName, string fileID)
+        {
+
+            FileModel model = new FileModel();
+            FileUpload.Models.FileInfo file = new FileUpload.Models.FileInfo();
+            file = (from c in model.FileInfoSet
+                    where c.FileMD5 == fileMd5
+                    select c).FirstOrDefault();
+            if (file == null)
+            {
+                return HttpNotFound();//代表服务器上没有这个文件
+            }
+            
+            return Json(new//存在MD5相同的文件
+            {
+                Eixst = true
+            });
         }
     }
 }

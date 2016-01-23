@@ -60,7 +60,7 @@
                 var $li = $('<div id="' + file.id + '" class="item">' +
                         '<h4 class="info">' + file.name + '<button type="button" fileId="' + file.id + '" class="btn btn-danger btn-delete"><span class="glyphicon glyphicon-trash"></span></button></h4>' +
                         '<p class="state">等待上传...</p>' +
-                        '<img>' +'</div>'),
+                        '<img>' + '</div>'),
                     $img = $li.find('img');
                 // $list为容器jQuery实例
                 $list.append($li);
@@ -74,7 +74,7 @@
                     $img.attr('src', src);
                 }, thumbnailWidth, thumbnailHeight);
                 //删除要上传的文件
-                //每次添加文件都给btn-delete绑定删除方法 
+                //每次添加文件都给btn-delete绑定删除方法
                 $(".btn-delete").click(function () {
                     //console.log($(this).attr("fileId"));//拿到文件id
                     uploader.removeFile(uploader.getFile($(this).attr("fileId"), true));
@@ -117,6 +117,23 @@
                 $('#' + file.id).find('p.state').text('上传出错');
                 //上传出错后进度条爆红
                 $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-danger");
+                //添加重试按钮
+                //为了防止重复添加重试按钮，做一个判断
+                //var retrybutton = $('#' + file.id).find(".btn-retry");
+                //$('#' + file.id)
+                if ($('#' + file.id).find(".btn-retry").length  <1) {
+                    var btn = $('<button type="button" fileid="' + file.id + '" class="btn btn-success btn-retry"><span class="glyphicon glyphicon-refresh"></span></button>');
+                    $('#' + file.id).find(".info").append(btn);//.find(".btn-danger")
+                }
+                
+
+                
+                $(".btn-retry").click(function () {
+                    //console.log($(this).attr("fileId"));//拿到文件id
+                    uploader.retry(uploader.getFile($(this).attr("fileId")));
+
+                });
+
             });
 
             uploader.on('uploadComplete', function (file) {//上传完成后回调
@@ -143,6 +160,11 @@
                     return false;
                 }
             });
+            //重传指定文件
+            //function retry(file) {
+            //    uploader.retry(file);
+            //}
+
 
         });
 

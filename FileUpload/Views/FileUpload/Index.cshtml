@@ -101,6 +101,22 @@
                 $('#' + file.id).find('p.state').text('上传出错');
                 //上传出错后进度条爆红
                 $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-danger");
+                //添加重试按钮
+                //为了防止重复添加重试按钮，做一个判断
+                //var retrybutton = $('#' + file.id).find(".btn-retry");
+                //$('#' + file.id)
+                if ($('#' + file.id).find(".btn-retry").length < 1) {
+                    var btn = $('<button type="button" fileid="' + file.id + '" class="btn btn-success btn-retry"><span class="glyphicon glyphicon-refresh"></span></button>');
+                    $('#' + file.id).find(".info").append(btn);//.find(".btn-danger")
+                }
+
+
+
+                $(".btn-retry").click(function () {
+                    //console.log($(this).attr("fileId"));//拿到文件id
+                    uploader.retry(uploader.getFile($(this).attr("fileId")));
+
+                });
             });
 
             uploader.on('uploadComplete', function (file) {//上传完成后回调

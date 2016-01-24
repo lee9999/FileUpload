@@ -181,6 +181,22 @@
                 $('#' + file.id).find('p.state').text('上传出错');
                 //上传出错后进度条爆红
                 $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-danger");
+                //添加重试按钮
+                //为了防止重复添加重试按钮，做一个判断
+                //var retrybutton = $('#' + file.id).find(".btn-retry");
+                //$('#' + file.id)
+                if ($('#' + file.id).find(".btn-retry").length < 1) {
+                    var btn = $('<button type="button" fileid="' + file.id + '" class="btn btn-success btn-retry"><span class="glyphicon glyphicon-refresh"></span></button>');
+                    $('#' + file.id).find(".info").append(btn);//.find(".btn-danger")
+                }
+
+
+
+                $(".btn-retry").click(function () {
+                    //console.log($(this).attr("fileId"));//拿到文件id
+                    uploader.retry(uploader.getFile($(this).attr("fileId")));
+
+                });
             });
 
             uploader.on('uploadComplete', function (file) {//上传完成后回调
@@ -197,6 +213,16 @@
             $("#UploadBtn").click(function () {
                 uploader.upload();//上传
             });
+
+            $("#StopBtn").click(function () {
+                //uploader.upload();//上传
+                
+                uploader.stop(true);//暂停上传有问题，这个变成了终止上传，开始之后就是完全重新上传了
+                
+            });
+
+            
+
 
             uploader.on('uploadAccept', function (file, response) {
                 //if (uploader.errorCode) {
@@ -329,7 +355,8 @@
                     </div>
                 </div>
 
-                <div id="UploadBtn" class="webuploader-pick" style="float: left">开始上传</div>
+                <div id="UploadBtn" class="webuploader-pick" style="float: left; margin-right: 10px">开始上传</div>
+                <div id="StopBtn" class="webuploader-pick" style="float: left; margin-right: 10px">暂停上传</div>
             </div>
         </div>
     </div>

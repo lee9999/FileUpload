@@ -39,3 +39,44 @@ uploader.on( 'uploadBeforeSend', function( block, data ) {
     // 删除其他数据
     // delete data.key;
 });
+
+
+/**
+         * 当某个文件的分块在发送前触发，主要用来询问是否要添加附带参数，大文件在开起分片上传的前提下此事件可能会触发多次。 
+         * block {Object}
+         * data {Object}默认的上传参数，可以扩展此对象来控制上传参数。
+         * headers 可以扩展此对象来控制上传头部。
+         */
+        uploader.on('uploadBeforeSend', function(block, data, headers) {
+             // block为分块数据。
+
+            // file为分块对应的file对象。
+            var file = block.file;
+            var fileMd5 = file.wholeMd5;
+            // 修改data可以控制发送哪些携带数据。
+            data.fileMd5 = fileMd5;
+            //data["fileMd5"] = fileMd5;
+
+            // 将存在file对象中的md5数据携带发送过去。
+            // data.fileMd5 = file.md5;
+
+            // 删除其他数据
+            // delete data.key;
+            if(block.chunks>1){ //文件大于chunksize 分片上传
+                data.isChunked = true;
+            }else{
+                data.isChunked = false;
+            }
+
+            data.chunkMd5 = block.chunkMd5;
+           // var me = this;
+            //me.options.server = baseUrl + '/fileUpload/chunkUpload'+"/"+block.chunk+"/"+block.chunks;
+
+            //console.log("uploadBeforeSend: block.file.size="+block.file.size);
+            insertLog("<br>"+moment().format("YYYY-MM-DD HH:mm:ss")+" uploadBeforeSend:文件"+file.name+"  分片"+block.chunk+"/"+block.chunks);
+        });
+		
+		
+		
+		秒传和断点续传讨论https://github.com/fex-team/webuploader/issues/142
+		

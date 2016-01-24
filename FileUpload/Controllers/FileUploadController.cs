@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace FileUpload.Controllers
 {
-    public class FileUploadController : Controller
+    public class FileUploadController : FileBaseController
     {
         public ViewResult Index()
         {
@@ -17,7 +17,7 @@ namespace FileUpload.Controllers
         //解决文件上传最大4M的显示可在web.config中设置，当前设置，最大上传大小2GB，最大上传时间一小时
         public ActionResult FileUp(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
-            string filePathName = String.Empty;
+            string fileFullName = String.Empty;
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             if (Request.Files.Count == 0)
             {
@@ -27,28 +27,64 @@ namespace FileUpload.Controllers
             }
             string ex = Path.GetExtension(file.FileName);
             //没有做文件类型验证
-            filePathName = Guid.NewGuid().ToString("N") + ex;
-            if (!System.IO.Directory.Exists(localPath))
+            fileFullName = Guid.NewGuid().ToString("N") + ex;
+
+            if (!SaveFile(localPath, fileFullName, file))
             {
-                System.IO.Directory.CreateDirectory(localPath);
+                return Json(new { error = true });
             }
-            try
+            else
             {
-                file.SaveAs(Path.Combine(localPath, filePathName));
+                return Json(new
+                {
+                    jsonrpc = "2.0",
+                    id = id,
+                    filePath = "/Upload/" + fileFullName
+                });
             }
-            catch (Exception)
-            {
-                //异常处理   Log4Net 
-                //return HttpNotFound();
-                return Json(new { error = true });//新的错误返回方式，更加轻量！
-            }
-            return Json(new
-            {
-                jsonrpc = "2.0",
-                id = id,
-                filePath = "/Upload/" + filePathName
-            });
+
+            #region
+            //if (!System.IO.Directory.Exists(localPath))
+            //{
+            //    System.IO.Directory.CreateDirectory(localPath);
+            //}
+            //try
+            //{
+            //    file.SaveAs(Path.Combine(localPath, fileFullName));
+            //}
+            //catch (Exception)
+            //{
+            //    //异常处理   Log4Net 
+            //    //return HttpNotFound();
+            //    return Json(new { error = true });//新的错误返回方式，更加轻量！
+            //}
+            //return Json(new
+            //{
+            //    jsonrpc = "2.0",
+            //    id = id,
+            //    filePath = "/Upload/" + fileFullName
+            //});
+            #endregion
 
         }
+
+        #region 方法移到了FileBaseController
+        //private bool SaveFile(string localPath, string fileFullName, HttpPostedFileBase file)
+        //{
+        //    if (!System.IO.Directory.Exists(localPath))
+        //    {
+        //        System.IO.Directory.CreateDirectory(localPath);
+        //    }
+        //    try
+        //    {
+        //        file.SaveAs(Path.Combine(localPath, fileFullName));
+        //        return true;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return false;
+        //    }
+        //} 
+        #endregion
     }
 }

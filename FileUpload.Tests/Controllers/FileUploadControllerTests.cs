@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Moq;
+using System.Reflection;
 
 namespace FileUpload.Controllers.Tests
 {
@@ -25,18 +26,23 @@ namespace FileUpload.Controllers.Tests
             //Assert
             Assert.IsNotNull(result);
         }
-
+        /// <summary>
+        /// 此测试有问题
+        /// </summary>
         [TestMethod()]
         public void FileUpTest()
         {
             //Arrange
             var httpPostFileBase = new Mock<HttpPostedFileBase>();
-            string localPath = Path.Combine("D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\", "Upload\\DO Not Delete.txt");
+            string UnitTestFileFolderPath =
+                Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("bin"));
+
+            string localPath = Path.Combine(UnitTestFileFolderPath, "UnitTestTempFile.txt");
             //Act
             httpPostFileBase.Setup(a => a.SaveAs(localPath)).Callback(SavaFile(localPath)); //当调用saveas方法是实际上调用的是callback
             //Assert 判断文件是否写入成功
-            DirectoryInfo uploadFolder = new DirectoryInfo("D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload");
-            FileInfo[] fileInfo = uploadFolder.GetFiles("DO Not Delete.txt");
+            DirectoryInfo uploadFolder = new DirectoryInfo(UnitTestFileFolderPath);
+            FileInfo[] fileInfo = uploadFolder.GetFiles("UnitTestTempFile.txt");
             Assert.IsTrue(fileInfo.Length>0);
         }
 

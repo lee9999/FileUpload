@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace FileUpload.Controllers
 {
-    public class ImagUploadController : Controller
+    public class ImagUploadController : FileBaseController
     {
         public ViewResult Index()
         {
@@ -54,7 +54,7 @@ namespace FileUpload.Controllers
 
 
             //开始保存文件
-            string filePathName = String.Empty;
+            string fileFullName = String.Empty;
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             if (Request.Files.Count == 0)
             {
@@ -63,32 +63,49 @@ namespace FileUpload.Controllers
                 return Json(new { error = true });//新的错误返回方式，更加轻量！
             }
 
-            filePathName = Guid.NewGuid().ToString("N") + ex;
-            if (!System.IO.Directory.Exists(localPath))
+            fileFullName = Guid.NewGuid().ToString("N") + ex;
+
+            if (!SaveFile(localPath, fileFullName, file))
             {
-                System.IO.Directory.CreateDirectory(localPath);
+                return Json(new { error = true });
             }
-            try
+            else
             {
-                file.SaveAs(Path.Combine(localPath, filePathName));
+                return Json(new
+                {
+                    jsonrpc = "2.0",
+                    id = id,
+                    filePath = "/Upload/" + fileFullName
+                });
             }
-            catch (Exception)
-            {
-                //异常处理   Log4Net 
-                //return HttpNotFound();
-                return Json(new { error = true });//新的错误返回方式，更加轻量！
-            }
-            finally
-            {
-                br.Close();
-                fs.Close();
-            }
-            return Json(new
-            {
-                jsonrpc = "2.0",
-                id = id,
-                filePath = "/Upload/" + filePathName
-            });
+
+            #region 方法移到了FileBaseController
+            //if (!System.IO.Directory.Exists(localPath))
+            //{
+            //    System.IO.Directory.CreateDirectory(localPath);
+            //}
+            //try
+            //{
+            //    file.SaveAs(Path.Combine(localPath, fileFullName));
+            //}
+            //catch (Exception)
+            //{
+            //    //异常处理   Log4Net 
+            //    //return HttpNotFound();
+            //    return Json(new { error = true });//新的错误返回方式，更加轻量！
+            //}
+            //finally
+            //{
+            //    br.Close();
+            //    fs.Close();
+            //}
+            //return Json(new
+            //{
+            //    jsonrpc = "2.0",
+            //    id = id,
+            //    filePath = "/Upload/" + fileFullName
+            //}); 
+            #endregion
 
         }
 

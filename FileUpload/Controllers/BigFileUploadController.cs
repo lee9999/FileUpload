@@ -22,7 +22,7 @@ namespace FileUpload.Controllers
         //解决文件上传最大4M的显示可在web.config中设置，当前设置，最大上传大小2GB，最大上传时间一小时
         public ActionResult BigFileUp(string guid, string md5value, string chunks, string chunk, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
-            object lockObj = null;
+            //object lockObj = null;
 
             if (Request.Files.Count == 0)
             {

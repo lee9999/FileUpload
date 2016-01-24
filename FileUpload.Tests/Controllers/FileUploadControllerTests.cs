@@ -27,7 +27,7 @@ namespace FileUpload.Controllers.Tests
             Assert.IsNotNull(result);
         }
         /// <summary>
-        /// 此测试有问题
+        /// 此测试有问题，永远会成功
         /// </summary>
         [TestMethod()]
         public void FileUpTest()

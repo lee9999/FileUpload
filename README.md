@@ -1,5 +1,7 @@
 # FileUpload
-FileUpload/ImagUpload/BigFileUpload
+文件上传，图片上传，大文件分片上传，文件“秒传”
+
+AppVeyor:[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)
 
 主要基于jQuery,百度的webuploader，twitter的bootstrap；支持IE9以上，Chrome，FireFox,其他浏览器未测试；
 

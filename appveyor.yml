@@ -4,11 +4,6 @@ build_script:
   - build.cmd --quiet verify
 clone_depth: 1
 test:
-  categories:
-    only:
-      - BigFileUploadController
-      - FileBaseController
-	  - FileUploadController
-      - HomeController
-	  - ImagUploadController
+  assemblies:
+    - '**\*.FileUpload.dll'
 deploy: off

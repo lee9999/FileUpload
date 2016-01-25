@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -18,7 +19,21 @@ namespace FileUpload.Controllers
         public ActionResult FileUp(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
             string fileFullName = String.Empty;
-            string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
+            string localPath = string.Empty;
+            #region MyRegion
+            //string localPath =
+            //    Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("bin"));
+            //localPath = Path.Combine(localPath, "Upload"); 
+            #endregion
+            try
+            {
+                localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
+            }
+            catch (Exception)
+            {
+
+                 localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+            }
             if (Request.Files.Count == 0)
             {
                 //return HttpNotFound();

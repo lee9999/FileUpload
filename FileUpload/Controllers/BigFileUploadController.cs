@@ -34,7 +34,16 @@ namespace FileUpload.Controllers
 
             string ex = Path.GetExtension(file.FileName);
             string fileFullName = String.Empty;
-            string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
+            string localPath = String.Empty;
+            try
+            {
+                localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
+            }
+            catch (Exception)
+            {
+
+                localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+            }
 
 
 

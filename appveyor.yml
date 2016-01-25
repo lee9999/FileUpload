@@ -4,7 +4,8 @@ build_script:
   - build.cmd 
 after_build:
   - cmd: cd C:/projects/fileupload
-  - cmd: msbuild.exe FileUpload.sln
+  - cmd: dir /a *
+  - cmd: msbuild.exe FileUpload.sln /t:Clean
   - ps: Write-Host "build DONE,Start UnitTest"
   - ps: Write-Host "当前目录下的文件："
   - cmd: dir /a *

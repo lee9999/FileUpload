@@ -4,6 +4,10 @@ build_script:
   - build.cmd --quiet verify
 after_build:
   - ps: Write-Host "build DONE,Start UnitTest"
+  - ps: Write-Host "当前目录下的文件："
+  - cmd: dir /a *
+  - cmd: cd/FileUpload/bin
+  - cmd: dir /a *
   - cmd: vstest.console.exe /logger:Appveyor  .\FileUpload\bin\debug\FileUpload.dll /Enablecodecoverage /InIsolation /TestCaseFilter:"Priority=1"
 clone_depth: 1
 test:

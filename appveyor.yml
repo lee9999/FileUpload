@@ -3,6 +3,7 @@ init:
 build_script:
   - build.cmd 
 after_build:
+  - cmd: cd C:/projects/fileupload
   - cmd: .\build
   - ps: Write-Host "build DONE,Start UnitTest"
   - ps: Write-Host "当前目录下的文件："

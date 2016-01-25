@@ -3,5 +3,5 @@ init:
 build_script:
   - build.cmd --quiet verify
 clone_depth: 1
-test: off
+test: on
 deploy: off

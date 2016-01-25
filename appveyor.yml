@@ -1,7 +1,7 @@
 init:
   - git config --global core.autocrlf true
 build_script:
-  - build.cmd  verify
+  - build.cmd 
 after_build:
   - cmd: .\build
   - ps: Write-Host "build DONE,Start UnitTest"

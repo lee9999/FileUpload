@@ -1,5 +1,8 @@
 init:
   - git config --global core.autocrlf true
+after_build:
+  -Write-Host "build DONE,Start UnitTest"
+  -vstest.console.exe /logger:Appveyor  .\FileUpload\bin\debug\FileUpload.dll /Settings:Local.RunSettings /InIsolation /TestCaseFilter:"Priority=1"
 build_script:
   - build.cmd --quiet verify
 clone_depth: 1

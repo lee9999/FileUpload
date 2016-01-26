@@ -10,7 +10,6 @@ after_build:
   - cmd: dir /a *
   - cmd: cd C:/projects/fileupload/FileUpload
   - cmd: dir /a *
-  - cmd: vstest.console.exe /logger:Appveyor  ./FileUpload/bin/debug/FileUpload.dll /Enablecodecoverage /InIsolation /TestCaseFilter:"Priority=1"
 clone_depth: 1
 test:
   assemblies:

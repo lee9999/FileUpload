@@ -256,15 +256,21 @@ namespace FileUpload.Controllers
             file = (from c in model.FileInfoSet
                     where c.FileMD5 == fileMd5
                     select c).FirstOrDefault();
+            //if (file == null)
+            //{
+            //    return HttpNotFound();//代表服务器上没有这个文件
+            //}
+
+            //return Json(new//存在MD5相同的文件
+            //{
+            //    Eixst = true
+            //});
             if (file == null)
             {
-                return HttpNotFound();//代表服务器上没有这个文件
+                return Json("this file is not exist");
             }
-            
-            return Json(new//存在MD5相同的文件
-            {
-                Eixst = true
-            });
+
+            return Json("this file is exist");
         }
 
 

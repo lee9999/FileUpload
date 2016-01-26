@@ -92,17 +92,23 @@
                         data: {
                             fileMd5: fileMd5,
                             fileName: file.name,
-                            fileID:file.id,
+                            fileID: file.id,
                             //isShared: $("#isShared").val()
                         },
                         success: function (result) {
-                            console.log("服务器上已经有同样的文件了，开始秒传！");
+                            console.log(result);
+                            if (result == "this file is exist") {
+                                console.log("服务器上已经有同样的文件了，开始秒传！");
 
-                            uploader.removeFile(file, true);
+                                uploader.removeFile(file, true);
 
-                            $('#' + file.id).find('p.state').text('已上传');
-                            $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
-                            $('#' + file.id).find(".info").find('.btn').fadeOut('slow');//上传完后删除"删除"按钮
+                                $('#' + file.id).find('p.state').text('已上传');
+                                $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
+                                $('#' + file.id).find(".info").find('.btn').fadeOut('slow');//上传完后删除"删除"按钮
+                            } else {
+                                console.log("服务器上没有同样的文件，秒传失败！");
+                            }
+
 
 
 
@@ -216,12 +222,12 @@
 
             $("#StopBtn").click(function () {
                 //uploader.upload();//上传
-                
+
                 uploader.stop(true);//暂停上传有问题，这个变成了终止上传，开始之后就是完全重新上传了
-                
+
             });
 
-            
+
 
 
             uploader.on('uploadAccept', function (file, response) {
@@ -232,7 +238,7 @@
                 if (response._raw == '{"error":true}') {
                     return false;
                 }
-                
+
             });
 
 

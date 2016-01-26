@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Moq;
 using System.Web;
 using System.Reflection;
+using System.Web.Helpers;
 
 namespace FileUpload.Controllers.Tests
 {
@@ -46,11 +47,13 @@ namespace FileUpload.Controllers.Tests
             //Arrange
             BigFileUploadController bigFileUploadController = new BigFileUploadController();
             //Act
-            ActionResult result = bigFileUploadController.IsMD5Exist("ef13915dda1f0dd3e2c5576ca2c7dce2", "fileName", "FileID") as ActionResult;
+            //ActionResult result = bigFileUploadController.IsMD5Exist("ef13915dda1f0dd3e2c5576ca2c7dce2", "fileName", "FileID") as ActionResult;
+            var result = bigFileUploadController.IsMD5Exist("ef13915dda1f0dd3e2c5576ca2c7dce2", "fileName", "FileID") as JsonResult;
 
             //Assert  失败： System.Web.Mvc.HttpNotFoundResult 成功： System.Web.Mvc.JsonResult
-            string a = result.ToString();
-            Assert.AreEqual(a, "System.Web.Mvc.JsonResult");
+            string data = result.Data.ToString();
+            Console.WriteLine(data);
+            Assert.AreEqual(data, "this file is exist");
         }
 
 
@@ -74,11 +77,15 @@ namespace FileUpload.Controllers.Tests
             //Arrange
             BigFileUploadController bigFileUploadController = new BigFileUploadController();
             //Act
-            ActionResult result = bigFileUploadController.IsMD5Exist("this md5 is not exist", "fileName", "FileID") as ActionResult;
+            //ActionResult result = bigFileUploadController.IsMD5Exist("this md5 is not exist", "fileName", "FileID") as ActionResult;
 
+            var result = bigFileUploadController.IsMD5Exist("this md5 is not exist", "fileName", "FileID") as JsonResult;
+            string data = result.Data.ToString();
             //Assert  失败： System.Web.Mvc.HttpNotFoundResult 成功： System.Web.Mvc.JsonResult
-            string a = result.ToString();
-            Assert.AreEqual(a, "System.Web.Mvc.HttpNotFoundResult");
+
+            
+            Console.WriteLine(data);
+            Assert.AreEqual(data, "this file is not exist");
         }
         /// <summary>
         /// 未分块文件的测试

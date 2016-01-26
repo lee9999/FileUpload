@@ -17,4 +17,4 @@ copy %CACHED_NUGET% .nuget\nuget.exe > nul
 :restore
 IF EXIST build goto run
 
-msbuild "FileUpload.sln" /verbosity:minimal /logger:"C:\ProgramFiles\AppVeyor\BuilAgent\Appveyor.MSBuildLogger.dll"
+msbuild "FileUpload.sln" /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"

@@ -7,12 +7,12 @@ before_build:
 build_script:
   - build.cmd 
 after_build:
-  - cmd: cd C:/projects/fileupload
-  - cmd: dir /a *
   - ps: Write-Host "build DONE,Start UnitTest"
   - ps: Write-Host "当前目录下的文件："
   - cmd: dir /a *
-  - cmd: cd C:/projects/fileupload/FileUpload
+  - cmd: cd C:/projects/fileupload/FileUpload/bin
+  - cmd: dir /a *
+  - cmd: cd C:/projects/fileupload/FileUpload/bin/Release
   - cmd: dir /a *
 clone_depth: 1
 test:

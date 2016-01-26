@@ -14,7 +14,7 @@ after_build:
   - cmd: dir /a *
   - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin
   - cmd: dir /a *
-  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 /ListDiscoverers /ListExecutors /ListLoggers C:/projects/fileupload/FileUpload/bin/FileUpload.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
+  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 /Discoverers:Microsoft.VisualStudio.TestPlatform.Extensions.VSTestIntegration.MSTestDiscoverer /Executors:Microsoft.VisualStudio.TestPlatform.Extensions.VSTestIntegration.MSTestExecutor  C:/projects/fileupload/FileUpload/bin/FileUpload.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
 clone_depth: 1
 test:
   assemblies:

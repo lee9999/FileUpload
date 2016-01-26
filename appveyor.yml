@@ -12,7 +12,7 @@ after_build:
   - cmd: dir /a *
   - cmd: cd C:/projects/fileupload/FileUpload/bin
   - cmd: dir /a *
-  - vstest.console.exe /logger:Appveyor  C:/projects/fileupload/FileUpload/bin/FileUpload.dll /Settings:Local.RunSettings /InIsolation /TestCaseFilter:"Priority=1"
+  - vstest.console.exe /logger:Appveyor  C:/projects/fileupload/FileUpload/bin/FileUpload.dll  /InIsolation /TestCaseFilter:"Priority=1"
 clone_depth: 1
 test:
   assemblies:

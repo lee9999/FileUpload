@@ -6,3 +6,4 @@ FileUpload.Tests/obj/
 ~$bUploader API文档.docx
 FileUpload/Upload/
 FileUpload.Tests/UnitTestTempFile.txt
+FileUpload/obj/Release/

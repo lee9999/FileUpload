@@ -12,6 +12,7 @@ namespace FileUpload.Controllers
     {
         public ViewResult Index()
         {
+            console
             return View();
         }
         // GET: FileUpload

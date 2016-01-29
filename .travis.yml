@@ -1,0 +1,8 @@
+language: csharp
+solution: ./FileUpload.sln
+
+install:
+  - nuget restore ./FileUpload.sln
+
+script:
+  - xbuild ./FileUpload.sln

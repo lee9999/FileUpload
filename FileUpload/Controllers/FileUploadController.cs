@@ -43,7 +43,7 @@ namespace FileUpload.Controllers
             string ex = Path.GetExtension(file.FileName);
             //没有做文件类型验证
             fileFullName = Guid.NewGuid().ToString("N") + ex;
-
+            //也可以根据需要抽取到FileBaseController里面
             if (!SaveFile(localPath, fileFullName, file))
             {
                 return Json(new { error = true });

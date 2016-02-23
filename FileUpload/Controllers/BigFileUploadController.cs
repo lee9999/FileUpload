@@ -22,11 +22,11 @@ namespace FileUpload.Controllers
         //解决文件上传最大4M的显示可在web.config中设置，当前设置，最大上传大小2GB，最大上传时间一小时
         public ActionResult BigFileUp(string guid, string md5value, string chunks, string chunk, string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
+            //全程没有做文件后缀或者类型验证，需要的应该在开始就做验证
             //object lockObj = null;
 
             if (Request.Files.Count == 0)
             {
-                //return HttpNotFound();
                 return Json(new { error = true });
             }
 
@@ -41,7 +41,6 @@ namespace FileUpload.Controllers
             }
             catch (Exception)
             {
-
                 localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
             }
 
@@ -60,7 +59,6 @@ namespace FileUpload.Controllers
             else
             {
                 //文件没有分块直接保存
-                //return HttpNotFound();
                 fileFullName = Guid.NewGuid().ToString("N") + ex;
                 //file.SaveAs(Path.Combine(HttpRuntime.AppDomainAppPath + "\\Upload", fileFullName));
 
@@ -72,12 +70,16 @@ namespace FileUpload.Controllers
                 {
                     
                 }
+
+                #region 保存文件md5到数据库
                 FileModel model = new FileModel();
                 FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
                 upfile.FileMD5 = md5value;
                 upfile.FileName = fileFullName;
                 model.FileInfoSet.Add(upfile);
                 model.SaveChanges();
+                #endregion
+
                 return Json(new
                 {
                     jsonrpc = "2.0",
@@ -106,12 +108,7 @@ namespace FileUpload.Controllers
             }
             else
             {
-                //return Json(new
-                //{
-                //    jsonrpc = "2.0",
-                //    id = id,
-                //    filePath = "/Upload/" + fileFullName
-                //});
+                //分块文件保存成功后要判断是否合并文件
             }
 
 
@@ -142,7 +139,7 @@ namespace FileUpload.Controllers
             //finally
             if (xuhao == 0)//第一个分块负责上传的进程留下来合并文件
             {
-                //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！（已解决）
+                //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！（已解决，看上面）
 
                 //待文件夹下的文件数目达到分块数目后拼接成一个文件，并删除临时文件
                 //fileFullName文件夹
@@ -225,13 +222,14 @@ namespace FileUpload.Controllers
 
 
 
-                    //将文件信息写入数据库
+                    #region 将文件信息写入数据库
                     FileModel model = new FileModel();
                     FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
                     upfile.FileMD5 = md5value;
                     upfile.FileName = filefullname;
                     model.FileInfoSet.Add(upfile);
-                    model.SaveChanges();
+                    model.SaveChanges(); 
+                    #endregion
 
                     fa.Flush();
                     //fa.Close();//关闭流

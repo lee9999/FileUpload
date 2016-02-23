@@ -19,7 +19,7 @@ namespace FileUpload.Controllers
         public ActionResult ImagUp(string id, string name, string type, string lastModifiedDate, int size, HttpPostedFileBase file)
         {
             #region 判断文件后缀名
-            string ex = Path.GetExtension(file.FileName).ToLower();
+            string ex = Path.GetExtension(file.FileName).ToLower();//要统一转成大写或者小写
             if (!IsFileExAcceptable(ex))
             {
                 return Json(new { error = true });
@@ -109,6 +109,11 @@ namespace FileUpload.Controllers
 
         }
 
+        /// <summary>
+        /// 判断文件后缀名是否可接受
+        /// </summary>
+        /// <param name="ex">.后缀名</param>
+        /// <returns></returns>
         public bool IsFileExAcceptable(string ex)
         {
             //做文件类型验证 文件后缀名统一为小写
@@ -129,8 +134,8 @@ namespace FileUpload.Controllers
         /// <summary>
         /// 真正的通过fileclass验证是否是真的图片，改后缀名也能验证出来
         /// </summary>
-        /// <param name="fs"></param>
-        /// <param name="br"></param>
+        /// <param name="fs">文件输入流</param>
+        /// <param name="br">二进制读入</param>
         /// <returns></returns>
         public bool IsRealImag(Stream fs, BinaryReader br)
         {

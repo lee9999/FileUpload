@@ -8,3 +8,5 @@ FileUpload/Upload/
 FileUpload.Tests/UnitTestTempFile.txt
 FileUpload/obj/Release/
 资料/
+*.scgdat
+*.suo

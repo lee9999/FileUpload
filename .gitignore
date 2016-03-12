@@ -10,3 +10,5 @@ FileUpload/obj/Release/
 资料/
 *.scgdat
 *.suo
+FileUpload.xUnit.Tests/bin/
+FileUpload.xUnit.Tests/obj/

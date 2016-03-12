@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using FileUpload.Controllers;
 using System;
 using System.Collections.Generic;
@@ -6,34 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Moq;
 using System.Reflection;
 using System.IO;
-using Moq;
-using System.Runtime.CompilerServices;
-using Moq.Protected;
-using System.Configuration;
-using System.Web.Mvc;
-using System.Web.Routing;
 
-namespace FileUpload.Controllers.Tests
+namespace FileUpload.Controllers.xUnit.Tests
 {
-    [TestClass()]
     public class FileBaseControllerTests
     {
-        /// <summary>
-        /// 因为暂时没法mock正确的HttpPostFileBase,所以暂时没法通过单元测试
-        /// </summary>
-        [TestMethod()]
+        [Fact(DisplayName = "对FileUploadController的单元测试")]
         public void SaveFileTest()
         {
-            //Arrange
-
             FileBaseController fileBaseController = new FileUploadController();
-            //var httpPostFileBase = new Mock<HttpPostedFileBase>();
+            var httpPostFileBase = new Mock<HttpPostedFileBase>();
+            //string localPathaaa =
+            //    Assembly.GetExecutingAssembly().Location;
             string localPath =
-                Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("bin"));
-
-            string fileFullName = "UnitTestTempFile.txt";
+                Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("FileUpload.xUnit.Tests.dll"));
+            string fileFullName = "xUnitTestTempFile.txt";
 
 
             var _stream = new FileStream(localPath + "packages.config",
@@ -56,20 +46,14 @@ namespace FileUpload.Controllers.Tests
             files.Setup(x => x.Get(0).InputStream).Returns(file.Object.InputStream);
             request.Setup(x => x.Files).Returns(files.Object);
             request.Setup(x => x.Files[0]).Returns(file.Object);
-            
+
 
             ////Act
             bool result = fileBaseController.SaveFile("D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload", fileFullName, file.Object);
 
 
-            
 
-            //Assert 判断文件是否写入成功
-            //DirectoryInfo uploadFolder = new DirectoryInfo(localPath);
-            //FileInfo[] fileInfo = uploadFolder.GetFiles("UnitTestTempFile.txt");
-            //Assert.IsTrue(fileInfo.Length > 0);
-            
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
     }
 }

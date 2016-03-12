@@ -31,10 +31,28 @@ namespace FileUpload.Controllers
             {
                 System.IO.Directory.CreateDirectory(localPath);
             }
+            //try
+            //{
+            //    file.SaveAs(Path.Combine(localPath, fileFullName));
+            //    return true;
+            //}
+            //catch (Exception)
+            //{
+            //    return false;
+            //}
             try
             {
                 file.SaveAs(Path.Combine(localPath, fileFullName));
-                return true;
+                DirectoryInfo uploadFolder = new DirectoryInfo(localPath);
+                FileInfo[] fileInfo = uploadFolder.GetFiles(fileFullName);
+                if (fileInfo.Length > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch (Exception)
             {

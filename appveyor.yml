@@ -12,13 +12,13 @@ after_build:
   - cmd: dir /a *
   - cmd: cd C:/projects/fileupload/FileUpload/bin
   - cmd: dir /a *
-  - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin
+  - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin/Release
   - cmd: dir /a *
-  - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll
-  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
-  - cmd: cd C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin
+  - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll
+  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
+  - cmd: cd C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin/Release
   - cmd: dir /a *
-  - xunit.console C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
+  - xunit.console C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
 clone_depth: 1
 test:
   assemblies:

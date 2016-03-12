@@ -57,7 +57,7 @@ namespace FileUpload.Controllers.Tests
             request.Setup(x => x.Files).Returns(files.Object);
             request.Setup(x => x.Files[0]).Returns(file.Object);
             
-
+            fileBaseController.ControllerContext=new ControllerContext(context.Object,new RouteData(),fileBaseController);
             ////Act
             bool result = fileBaseController.SaveFile("D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload", fileFullName, file.Object);
 

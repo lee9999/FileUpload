@@ -26,6 +26,10 @@ namespace FileUpload.Controllers
         /// <returns></returns>
         public bool SaveFile(string localPath, string fileFullName, HttpPostedFileBase file)
         {
+            if (localPath == string.Empty || fileFullName == String.Empty || file == null)
+            {
+                return false;
+            }
             
             if (!System.IO.Directory.Exists(localPath))
             {

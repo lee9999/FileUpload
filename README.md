@@ -1,9 +1,9 @@
 # FileUpload
 文件上传，图片上传，大文件分片上传，文件“秒传”
 
-master Build Status: AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)
-
-develop Build Status: AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/develop?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/develop)
+|Master|Develop|
+|:--:|:--:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)|[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/develop?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/develop)|
 
 1.主要功能经测试支持IE9以上，Chrome，FireFox；其他浏览器未测试；
 
@@ -16,5 +16,6 @@ develop Build Status: AppVeyor: [![Build status](https://ci.appveyor.com/api/pro
 5.单元测试部分：为每个Controller增加了单元测试，力求覆盖所有主要方法;
 
 6.存在的问题：
-因为官方文档不太清楚，断点续传暂时实现不了，解决了这个issue就可以继续了（https://github.com/fex-team/webuploader/issues/1499）；
-单元测试不太熟悉，遇到了好几个问题解决不了;
+因为官方文档不太清楚，断点续传暂时实现不了，解决了这个issue就可以继续了（https://github.com/fex-team/webuploader/issues/1499）;
+
+# 7 因为不会mock HttpPostedFileBase所以跳过两个测试，但是实际使用没有问题，所以就不管他了;

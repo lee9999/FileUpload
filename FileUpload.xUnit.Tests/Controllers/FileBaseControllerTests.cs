@@ -9,12 +9,13 @@ using System.Web;
 using Moq;
 using System.Reflection;
 using System.IO;
+using Xunit.Sdk;
 
 namespace FileUpload.Controllers.xUnit.Tests
 {
     public class FileBaseControllerTests
     {
-        [Fact(DisplayName = "对FileUploadController的单元测试")]
+        [Fact(DisplayName = "对FileUploadController的单元测试", Skip = "true")]
         public void SaveFileTest()
         {
             FileBaseController fileBaseController = new FileUploadController();

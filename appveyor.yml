@@ -14,14 +14,14 @@ after_build:
   - cmd: dir /a *
   - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin/Release
   - cmd: dir /a *
-  - ps: Write-Host "测试一开始："
-  - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll
-  - ps: Write-Host "测试二开始："
+  - ps: Write-Host "测试一（xUnit）开始："
   - xunit.console C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
-  - ps: Write-Host "测试三开始："
-  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
-  - cmd: cd C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin/Release
-  - cmd: dir /a *
+  - ps: Write-Host "测试二（msTest）开始："
+  - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll
+  # - ps: Write-Host "测试三开始："
+  # - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
+  # - cmd: cd C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin/Release
+  # - cmd: dir /a *
   
 clone_depth: 1
 test:

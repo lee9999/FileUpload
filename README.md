@@ -1,7 +1,9 @@
 # FileUpload
 文件上传，图片上传，大文件分片上传，文件“秒传”
 
-Build Status: AppVeyor:[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)
+master Build Status: AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)
+
+develop Build Status: AppVeyor: [![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/develop?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/develop)
 
 1.主要功能经测试支持IE9以上，Chrome，FireFox；其他浏览器未测试；
 

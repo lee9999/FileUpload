@@ -15,12 +15,12 @@ after_build:
   - ps: Write-Host "FileUpload/bin目录下的文件："
   - cmd: cd C:/projects/fileupload/FileUpload/bin
   - cmd: dir /a *
-  - ps: Write-Host "FileUpload.Tests/bin/Release目录下的文件："
-  - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin/Release
-  - cmd: dir /a *
-  - ps: Write-Host "FileUpload.xUnit.Tests/bin/Release目录下的文件："
-  - cmd: cd C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release
-  - cmd: dir /a *
+  # - - ps: Write-Host "FileUpload.Tests/bin/Release目录下的文件："
+  # - - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin/Release
+  # - - cmd: dir /a *
+  # - - ps: Write-Host "FileUpload.xUnit.Tests/bin/Release目录下的文件："
+  # - - cmd: cd C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release
+  # - - cmd: dir /a *
   # - ps: Write-Host "测试一（xUnit）开始："
   # - xunit.console.clr4 C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
   # - xunit.console C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll

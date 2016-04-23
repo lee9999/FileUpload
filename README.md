@@ -1,4 +1,6 @@
 # FileUpload
+
+[![Join the chat at https://gitter.im/izhangzhihao/FileUpload](https://badges.gitter.im/izhangzhihao/FileUpload.svg)](https://gitter.im/izhangzhihao/FileUpload?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 文件上传，图片上传，大文件分片上传，文件“秒传”
 
 |Master|Develop|

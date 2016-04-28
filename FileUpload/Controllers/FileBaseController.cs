@@ -49,6 +49,16 @@ namespace FileUpload.Controllers
                 file.SaveAs(Path.Combine(localPath, fileFullName));
                 DirectoryInfo uploadFolder = new DirectoryInfo(localPath);
                 FileInfo[] fileInfo = uploadFolder.GetFiles(fileFullName);
+                bool isExists = false;
+                foreach (var info in fileInfo)
+                {
+                    if (info.Name == fileFullName)
+                    {
+                        isExists = true;
+                    }
+
+                }
+                return isExists;
                 if (fileInfo.Length > 0)
                 {
                     return true;

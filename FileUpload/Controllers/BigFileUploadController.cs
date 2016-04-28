@@ -54,7 +54,6 @@ namespace FileUpload.Controllers
             {
                 fenkuai = Convert.ToInt32(chunks);
                 xuhao = Convert.ToInt32(chunk);
-                //isOk = fenkuai;//每次写入文件后-1，到0了就可以合并了(已放弃)
             }
             else
             {
@@ -68,7 +67,7 @@ namespace FileUpload.Controllers
                 }
                 else
                 {
-                    
+
                 }
 
                 #region 保存文件md5到数据库
@@ -77,7 +76,19 @@ namespace FileUpload.Controllers
                 upfile.FileMD5 = md5value;
                 upfile.FileName = fileFullName;
                 model.FileInfoSet.Add(upfile);
-                model.SaveChanges();
+                int result = 0;
+                try
+                {
+                    result = model.SaveChanges();
+                    if (result != 1)
+                    {
+                        return Json(new { error = true });
+                    }
+                }
+                catch (Exception)
+                {
+                    return Json(new { error = true });
+                }
                 #endregion
 
                 return Json(new
@@ -135,106 +146,100 @@ namespace FileUpload.Controllers
             //} 
             #endregion
 
-
+            int chunksNumber = Convert.ToInt32(chunks);
             //finally
-            if (xuhao == 0)//第一个分块负责上传的进程留下来合并文件
+            if (xuhao == chunksNumber - 1)//最后一个分块负责上传的进程留下来合并文件
             {
-                //此处有多线程问题，所以可能出现合并出多个文件的情况，而且下面只判断了文件数目，可能文件还没写入完成！（已解决，看上面）
+
 
                 //待文件夹下的文件数目达到分块数目后拼接成一个文件，并删除临时文件
                 //fileFullName文件夹
-                int count = 0;
                 DirectoryInfo TempFolder = new DirectoryInfo(tempPath);
-                foreach (var tempFile in TempFolder.GetFiles())
-                {
-                    count = count + 1;
-                }
-                if (count == fenkuai)
-                {
-                    //while (isOk != 0)
-                    //{
-                    //    Thread.Sleep(1000);
-                    //}
-                    //lock (lockObject)
-                    //{
 
-                    //}
-                    //达到合并的要求了
-                    //序号从0开始
-                    string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");//保存的路径
-                    //string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload\\"+guid);//测试：保存的路径
+                string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");//保存的路径
+                                                                                   //string path = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload\\"+guid);//测试：保存的路径
 
-                    string filefullname = Guid.NewGuid().ToString() + ex;
-                    //下面应该用using块实现
-                    FileStream fa = new FileStream(path + "\\" + filefullname, FileMode.Append, FileAccess.Write);
-                    for (int i = 0; i < count; i++)
+                string filefullname = Guid.NewGuid().ToString() + ex;
+                //下面应该用using块实现
+                FileStream fa = new FileStream(path + "\\" + filefullname, FileMode.Append, FileAccess.Write);
+                for (int i = 0; i < chunksNumber; i++)
+                {
+                    byte[] buffer = new byte[11 * 1024 * 1024];
+                    //FileStream fileTemp = new FileStream(tempPath + "\\temp"+i+ex, FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
+
+                    //解决了文件占用问题
+                    int tryTimes = 0;
+                    FileStream fileTemp = null;
+                    while (fileTemp == null)
                     {
-                        byte[] buffer = new byte[11 * 1024 * 1024];
-                        //FileStream fileTemp = new FileStream(tempPath + "\\temp"+i+ex, FileMode.Open, FileAccess.Read,FileShare.ReadWrite);
-
-                        //解决了文件占用问题
-                        int tryTimes = 0;
-                        FileStream fileTemp = null;
-                        while (fileTemp == null)
+                        try
                         {
-                            try
+                            fileTemp = new FileStream(tempPath + "\\temp" + i + ex, FileMode.Open, FileAccess.Read);
+                            tryTimes++;
+                            if (tryTimes > 10) //次数大于10就结束等待
                             {
-                                fileTemp = new FileStream(tempPath + "\\temp" + i + ex, FileMode.Open, FileAccess.Read);
-                                tryTimes++;
-                                if (tryTimes > 100) //次数大于100就结束等待
-                                {
-                                    return Json(new { error = true });
-                                }
-                            }
-                            catch (Exception)
-                            {
-
+                                return Json(new { error = true });
                             }
                         }
-
-
-                        int buffersize = Convert.ToInt32(fileTemp.Length);
-
-                        fileTemp.Read(buffer, 0, buffersize);
-                        fa.Write(buffer, 0, buffersize);
-
-                        //fileTemp.Read(buffer, 0, 10*1024*1024);
-                        //fa.Write(buffer, 0, 10 * 1024 * 1024);
-
-
-                        fileTemp.Flush();
-                        //fileTemp.Close();
-                        fileTemp.Dispose();
-
-
-
-
-
-
-
-                        if (i == count - 1)
+                        catch (Exception e)
                         {
-                            TempFolder.Delete(true);//删除temp目录 
+                            //可能会有两个异常
+                            //找不到文件异常 和 文件被另一个进程占用异常
+                            Console.WriteLine(e.Message);
                         }
-                       
                     }
 
 
+                    int buffersize = Convert.ToInt32(fileTemp.Length);
+
+                    fileTemp.Read(buffer, 0, buffersize);
+                    fa.Write(buffer, 0, buffersize);
+
+                    //fileTemp.Read(buffer, 0, 10*1024*1024);
+                    //fa.Write(buffer, 0, 10 * 1024 * 1024);
 
 
-                    #region 将文件信息写入数据库
-                    FileModel model = new FileModel();
-                    FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
-                    upfile.FileMD5 = md5value;
-                    upfile.FileName = filefullname;
-                    model.FileInfoSet.Add(upfile);
-                    model.SaveChanges(); 
-                    #endregion
+                    fileTemp.Flush();
+                    //fileTemp.Close();
+                    fileTemp.Dispose();
 
-                    fa.Flush();
-                    //fa.Close();//关闭流
-                    fa.Dispose();
+
+
+                    if (i == chunksNumber - 1)
+                    {
+                        TempFolder.Delete(true);//删除temp目录 
+                    }
+
                 }
+
+
+
+
+                #region 将文件信息写入数据库
+                FileModel model = new FileModel();
+                FileUpload.Models.FileInfo upfile = new FileUpload.Models.FileInfo();
+                upfile.FileMD5 = md5value;
+                upfile.FileName = filefullname;
+                model.FileInfoSet.Add(upfile);
+                //int result = model.SaveChanges();
+                int result = 0;
+                try
+                {
+                    result = model.SaveChanges();
+                    if (result != 1)
+                    {
+                        return Json(new { error = true });
+                    }
+                }
+                catch (Exception)
+                {
+                    return Json(new { error = true });
+                }
+                #endregion
+
+                fa.Flush();
+                //fa.Close();//关闭流
+                fa.Dispose();
             }
             return Json(new
             {

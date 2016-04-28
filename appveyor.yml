@@ -1,4 +1,6 @@
-configuration: Release
+configuration:
+  - Debug 
+  - Release
 init:
   - git config --global core.autocrlf true
 before_build:
@@ -10,14 +12,29 @@ after_build:
   - ps: Write-Host "build DONE,Start UnitTest"
   - ps: Write-Host "当前目录下的文件："
   - cmd: dir /a *
+  - ps: Write-Host "FileUpload/bin目录下的文件："
   - cmd: cd C:/projects/fileupload/FileUpload/bin
   - cmd: dir /a *
-  - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin
-  - cmd: dir /a *
-  - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload/bin/FileUpload.dll
-  - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload/bin/FileUpload.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
+  # - - ps: Write-Host "FileUpload.Tests/bin/Release目录下的文件："
+  # - - cmd: cd C:/projects/fileupload/FileUpload.Tests/bin/Release
+  # - - cmd: dir /a *
+  # - - ps: Write-Host "FileUpload.xUnit.Tests/bin/Release目录下的文件："
+  # - - cmd: cd C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release
+  # - - cmd: dir /a *
+  # - ps: Write-Host "测试一（xUnit）开始："
+  # - xunit.console.clr4 C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
+  # - xunit.console C:/projects/fileupload/FileUpload.xUnit.Tests/bin/Release/FileUpload.xUnit.Tests.dll
+  # - ps: Write-Host "测试二（msTest）开始："
+  # - vstest.console.exe /logger:Appveyor C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll
+  # - ps: Write-Host "测试三开始："
+  # - vstest.console.exe /logger:Appveyor /Platform:x86 /Framework:Framework45 C:/projects/fileupload/FileUpload.Tests/bin/Release/FileUpload.Tests.dll /UseVsixExtensions:true /InIsolation /TestCaseFilter:"Priority=1"
+  # - cmd: cd C:/projects/fileupload/FileUpload/FileUpload.xUnit.Tests/bin/Release
+  # - cmd: dir /a *
+  
 clone_depth: 1
 test:
   assemblies:
-    - '**\*.FileUpload.dll'
+    - FileUpload.xUnit.Tests.dll
+    - FileUpload.Tests.dll
+    # - '**\*.FileUpload.dll'
 deploy: off

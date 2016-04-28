@@ -105,6 +105,7 @@
                                 $('#' + file.id).find('p.state').text('已上传');
                                 $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
                                 $('#' + file.id).find(".info").find('.btn').fadeOut('slow');//上传完后删除"删除"按钮
+                                $("#StopBtn").fadeOut('slow');
                             } else {
                                 console.log("服务器上没有同样的文件，秒传失败！");
                             }
@@ -181,6 +182,7 @@
                 $('#' + file.id).find('p.state').text('已上传');
                 $('#' + file.id).find(".progress").find(".progress-bar").attr("class", "progress-bar progress-bar-success");
                 $('#' + file.id).find(".info").find('.btn').fadeOut('slow');//上传完后删除"删除"按钮
+                $('#StopBtn').fadeOut('slow');
             });
 
             uploader.on('uploadError', function (file) {
@@ -221,10 +223,41 @@
             });
 
             $("#StopBtn").click(function () {
-                //uploader.upload();//上传
+                console.log($('#StopBtn').attr("status"));
+                var status = $('#StopBtn').attr("status");
+                if (status == "suspend") {
+                    console.log("当前按钮是暂停，即将变为继续");
+                    $("#StopBtn").html("继续上传");
+                    $("#StopBtn").attr("status", "continuous");
 
-                uploader.stop(true);//暂停上传有问题，这个变成了终止上传，开始之后就是完全重新上传了
+                    console.log("__________________当前所有的文件_______________________");
+                    console.log(uploader.getFiles());
+                    console.log("__________________暂停上传_____________________________");
+                    uploader.stop(true);
+                    console.log("__________________所有当前暂停的文件___________________");
+                    console.log(uploader.getFiles("interrupt"));
+                } else {
+                    console.log("当前按钮是继续，即将变为暂停");
+                    $("#StopBtn").html("暂停上传");
+                    $("#StopBtn").attr("status", "suspend");
 
+                    console.log("__________________所有当前暂停的文件___________________");
+                    console.log(uploader.getFiles("interrupt"));
+                    uploader.upload(uploader.getFiles("interrupt"));
+                }
+
+
+
+
+
+                //console.log("__________________当前所有的文件_______________________");
+                //console.log(uploader.getFiles());
+                //console.log("__________________暂停上传_______________________");
+                //uploader.stop(true);
+                //console.log("__________________所有当前暂停的文件_______________________");
+                //console.log(uploader.getFiles("interrupt"));
+
+                //uploader.upload(uploader.getFiles("interrupt"));
             });
 
 
@@ -362,7 +395,7 @@
                 </div>
 
                 <div id="UploadBtn" class="webuploader-pick" style="float: left; margin-right: 10px">开始上传</div>
-                <div id="StopBtn" class="webuploader-pick" style="float: left; margin-right: 10px">暂停上传</div>
+                <div id="StopBtn" class="webuploader-pick" style="float: left; margin-right: 10px" status="suspend">暂停上传</div>
             </div>
         </div>
     </div>

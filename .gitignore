@@ -12,4 +12,8 @@ FileUpload/obj/Release/
 *.suo
 FileUpload.xUnit.Tests/bin/
 FileUpload.xUnit.Tests/obj/
+<<<<<<< HEAD
 *.Cache
+=======
+*.Cache
+>>>>>>> master

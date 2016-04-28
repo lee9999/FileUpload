@@ -8,6 +8,9 @@
 |:--:|:--:|
 |[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/master?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/master)|[![Build status](https://ci.appveyor.com/api/projects/status/2t60n9j7p3i8gbd5/branch/develop?svg=true)](https://ci.appveyor.com/project/izhangzhihao/fileupload/branch/develop)|
 
+[![Issue Stats](http://issuestats.com/github/izhangzhihao/FileUpload/badge/pr)](http://issuestats.com/github/izhangzhihao/FileUpload)
+[![Issue Stats](http://issuestats.com/github/izhangzhihao/FileUpload/badge/issue)](http://issuestats.com/github/izhangzhihao/FileUpload)
+
 1.主要功能经测试支持IE9以上，Chrome，FireFox；其他浏览器未测试；
 
 2.文件上传部分：主要实现了文件的上传，进度条，多文件一起上传，上传前删除，上传失败后手动删除，上传失败自动重试，上传失败手动重试（retry按钮），自动上传；

@@ -19,6 +19,7 @@
 5.单元测试部分：为每个Controller增加了单元测试，力求覆盖所有主要方法;
 
 6.存在的问题：
-因为官方文档不太清楚，断点续传暂时实现不了，解决了这个issue就可以继续了（https://github.com/fex-team/webuploader/issues/1499）;
+因为官方文档不太清楚，断点续传暂时实现不了，解决了这个issue就可以继续了（ https://github.com/fex-team/webuploader/issues/1499 ）
+暂停可以停止上传，但是再次点击开始的时候又会从头开始上传，这个我不知怎么解决;
 
-# 7 因为不会mock HttpPostedFileBase所以跳过两个测试，但是实际使用没有问题，所以就不管他了;
+7 因为不会mock HttpPostedFileBase所以跳过两个测试，但是实际使用没有问题，所以就不管他了;

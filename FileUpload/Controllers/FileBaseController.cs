@@ -35,15 +35,7 @@ namespace FileUpload.Controllers
             {
                 System.IO.Directory.CreateDirectory(localPath);
             }
-            //try
-            //{
-            //    file.SaveAs(Path.Combine(localPath, fileFullName));
-            //    return true;
-            //}
-            //catch (Exception)
-            //{
-            //    return false;
-            //}
+            
             try
             {
                 file.SaveAs(Path.Combine(localPath, fileFullName));
@@ -59,14 +51,16 @@ namespace FileUpload.Controllers
 
                 }
                 return isExists;
-                if (fileInfo.Length > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                #region 无效代码
+                //if (fileInfo.Length > 0)
+                //{
+                //    return true;
+                //}
+                //else
+                //{
+                //    return false;
+                //} 
+                #endregion
             }
             catch (Exception)
             {

@@ -29,16 +29,18 @@ namespace FileUpload.Controllers
             {
                 localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                 localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+                Console.WriteLine(e.Message);
+                string thisDir = System.IO.Directory.GetCurrentDirectory();
+                //D:\\代码\\ASP.NET\\FileUpload\\     FileUpload.Tests\\bin\\Debug
+                //localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+                int cutIndex = thisDir.LastIndexOf("FileUpload.Tests");
+                localPath = thisDir.Substring(0, cutIndex) + "FileUpload\\Upload";
             }
             if (Request.Files.Count == 0)
             {
-                //return HttpNotFound();
-                //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = "id" });
-                return Json(new { error = true });//新的错误返回方式，更加轻量！
+                return Json(new { error = true });
             }
             string ex = Path.GetExtension(file.FileName);
             //没有做文件类型验证

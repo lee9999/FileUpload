@@ -39,9 +39,14 @@ namespace FileUpload.Controllers
             {
                 localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+                Console.WriteLine(e.Message);
+                string thisDir = System.IO.Directory.GetCurrentDirectory();
+                //D:\\代码\\ASP.NET\\FileUpload\\     FileUpload.Tests\\bin\\Debug
+                //localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
+                int cutIndex = thisDir.LastIndexOf("FileUpload.Tests");
+                localPath = thisDir.Substring(0, cutIndex) + "FileUpload\\Upload";
             }
 
 

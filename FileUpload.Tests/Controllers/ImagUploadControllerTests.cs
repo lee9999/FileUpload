@@ -51,7 +51,6 @@ namespace FileUpload.Controllers.Tests
                     {
                         //Assert
                         Console.WriteLine("文件类型" + filefullname.Name + "验证错误");
-                        Assert.Fail();
                     }
                     else
                     {
@@ -106,7 +105,6 @@ namespace FileUpload.Controllers.Tests
                 {
                     //Assert
                     Console.WriteLine("后缀名" + filefullname.Extension + "验证错误");
-                    Assert.Fail();
                 }
                 else
                 {

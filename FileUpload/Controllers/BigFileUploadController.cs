@@ -43,8 +43,6 @@ namespace FileUpload.Controllers
             {
                 Console.WriteLine(e.Message);
                 string thisDir = System.IO.Directory.GetCurrentDirectory();
-                //D:\\代码\\ASP.NET\\FileUpload\\     FileUpload.Tests\\bin\\Debug
-                //localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
                 int cutIndex = thisDir.LastIndexOf("FileUpload.Tests");
                 localPath = thisDir.Substring(0, cutIndex) + "FileUpload\\Upload";
             }
@@ -128,28 +126,7 @@ namespace FileUpload.Controllers
             }
 
 
-            #region MyRegion
-            //if (!System.IO.Directory.Exists(tempPath))
-            //{
-            //    System.IO.Directory.CreateDirectory(tempPath);//不存在该文件夹就新建一个
-            //}
-            //try
-            //{
-            //    //if (isOk == 1)
-            //    //{
 
-            //    //}
-            //    file.SaveAs(Path.Combine(tempPath, fileFullName));
-            //    //isOk = isOk - 1;
-
-            //}
-            //catch (Exception)
-            //{
-            //    //异常处理   Log4Net 
-            //    //return HttpNotFound();
-            //    return Json(new { error = true });//新的错误返回方式，更加轻量！
-            //} 
-            #endregion
 
             int chunksNumber = Convert.ToInt32(chunks);
             //finally
@@ -212,7 +189,7 @@ namespace FileUpload.Controllers
 
                     if (i == chunksNumber - 1)
                     {
-                        TempFolder.Delete(true);//删除temp目录 
+                        TempFolder.Delete(true);//删除temp目录
                     }
 
                 }
@@ -264,15 +241,6 @@ namespace FileUpload.Controllers
             file = (from c in model.FileInfoSet
                     where c.FileMD5 == fileMd5
                     select c).FirstOrDefault();
-            //if (file == null)
-            //{
-            //    return HttpNotFound();//代表服务器上没有这个文件
-            //}
-
-            //return Json(new//存在MD5相同的文件
-            //{
-            //    Eixst = true
-            //});
             if (file == null)
             {
                 return Json("this file is not exist");

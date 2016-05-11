@@ -12,11 +12,6 @@ namespace FileUpload.Controllers
     /// </summary>
     public class FileBaseController : Controller
     {
-        //// GET: FileBase
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
         /// <summary>
         /// 保存文件的共用方法
         /// </summary>
@@ -30,12 +25,12 @@ namespace FileUpload.Controllers
             {
                 return false;
             }
-            
+
             if (!System.IO.Directory.Exists(localPath))
             {
                 System.IO.Directory.CreateDirectory(localPath);
             }
-            
+
             try
             {
                 file.SaveAs(Path.Combine(localPath, fileFullName));
@@ -51,16 +46,6 @@ namespace FileUpload.Controllers
 
                 }
                 return isExists;
-                #region 无效代码
-                //if (fileInfo.Length > 0)
-                //{
-                //    return true;
-                //}
-                //else
-                //{
-                //    return false;
-                //} 
-                #endregion
             }
             catch (Exception)
             {

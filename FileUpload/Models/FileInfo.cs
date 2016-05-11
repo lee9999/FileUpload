@@ -9,6 +9,5 @@ namespace FileUpload.Models
     {
         public string FileName { get; set; }
         public string FileMD5 { get; set; }
-        
     }
 }

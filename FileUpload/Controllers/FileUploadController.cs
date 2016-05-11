@@ -23,7 +23,7 @@ namespace FileUpload.Controllers
             #region MyRegion
             //string localPath =
             //    Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("bin"));
-            //localPath = Path.Combine(localPath, "Upload"); 
+            //localPath = Path.Combine(localPath, "Upload");
             #endregion
             try
             {
@@ -33,8 +33,6 @@ namespace FileUpload.Controllers
             {
                 Console.WriteLine(e.Message);
                 string thisDir = System.IO.Directory.GetCurrentDirectory();
-                //D:\\代码\\ASP.NET\\FileUpload\\     FileUpload.Tests\\bin\\Debug
-                //localPath = "D:\\代码\\ASP.NET\\FileUpload\\FileUpload\\Upload";//单元测试用
                 int cutIndex = thisDir.LastIndexOf("FileUpload.Tests");
                 localPath = thisDir.Substring(0, cutIndex) + "FileUpload\\Upload";
             }
@@ -60,48 +58,7 @@ namespace FileUpload.Controllers
                 });
             }
 
-            #region
-            //if (!System.IO.Directory.Exists(localPath))
-            //{
-            //    System.IO.Directory.CreateDirectory(localPath);
-            //}
-            //try
-            //{
-            //    file.SaveAs(Path.Combine(localPath, fileFullName));
-            //}
-            //catch (Exception)
-            //{
-            //    //异常处理   Log4Net 
-            //    //return HttpNotFound();
-            //    return Json(new { error = true });//新的错误返回方式，更加轻量！
-            //}
-            //return Json(new
-            //{
-            //    jsonrpc = "2.0",
-            //    id = id,
-            //    filePath = "/Upload/" + fileFullName
-            //});
-            #endregion
 
         }
-
-        #region 方法移到了FileBaseController
-        //private bool SaveFile(string localPath, string fileFullName, HttpPostedFileBase file)
-        //{
-        //    if (!System.IO.Directory.Exists(localPath))
-        //    {
-        //        System.IO.Directory.CreateDirectory(localPath);
-        //    }
-        //    try
-        //    {
-        //        file.SaveAs(Path.Combine(localPath, fileFullName));
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //} 
-        #endregion
     }
 }

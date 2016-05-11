@@ -16,16 +16,6 @@ namespace FileUpload.Controllers.Tests
     [TestClass()]
     public class ImagUploadControllerTests
     {
-        #region MyRegion
-        //[TestMethod()]
-        //public void ImagUpTest()
-        //{
-        //    //Arrange
-        //    //Act
-        //    //Assert
-        //} 
-        #endregion
-
         [TestMethod()]
         public void IndexTest()
         {
@@ -98,8 +88,6 @@ namespace FileUpload.Controllers.Tests
         [TestMethod()]
         public void IsFileExAcceptableTest()
         {
-
-            //Console.WriteLine(Assembly.GetExecutingAssembly().Location.Remove(Assembly.GetExecutingAssembly().Location.IndexOf("bin")));
 
             //Arrange
             ImagUploadController imagController = new ImagUploadController();
@@ -200,8 +188,8 @@ namespace FileUpload.Controllers.Tests
         //    controllerContext.HttpContext = httpContext.Object;
         //    imagUploadController.ControllerContext = controllerContext;
         //    //使用
-            
-            
+
+
         //    //Act
         //    string path = Path.Combine(localPath, "UnitTestFileFolder");//保存的路径
         //    DirectoryInfo floder = new DirectoryInfo(path);

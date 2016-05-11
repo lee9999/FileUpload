@@ -47,7 +47,6 @@ namespace FileUpload.Controllers
             {
                 return Json(new { error = true });
             }
-            
 
             #endregion
 
@@ -58,9 +57,7 @@ namespace FileUpload.Controllers
             string localPath = Path.Combine(HttpRuntime.AppDomainAppPath, "Upload");
             if (Request.Files.Count == 0)
             {
-                //return HttpNotFound();
-                //return Json(new { jsonrpc = 2.0, error = new { code = 102, message = "保存失败" }, id = id });
-                return Json(new { error = true });//新的错误返回方式，更加轻量！
+                return Json(new { error = true });
             }
 
             fileFullName = Guid.NewGuid().ToString("N") + ex;
@@ -79,33 +76,6 @@ namespace FileUpload.Controllers
                 });
             }
 
-            #region 方法移到了FileBaseController
-            //if (!System.IO.Directory.Exists(localPath))
-            //{
-            //    System.IO.Directory.CreateDirectory(localPath);
-            //}
-            //try
-            //{
-            //    file.SaveAs(Path.Combine(localPath, fileFullName));
-            //}
-            //catch (Exception)
-            //{
-            //    //异常处理   Log4Net 
-            //    //return HttpNotFound();
-            //    return Json(new { error = true });//新的错误返回方式，更加轻量！
-            //}
-            //finally
-            //{
-            //    br.Close();
-            //    fs.Close();
-            //}
-            //return Json(new
-            //{
-            //    jsonrpc = "2.0",
-            //    id = id,
-            //    filePath = "/Upload/" + fileFullName
-            //}); 
-            #endregion
 
         }
 
@@ -117,12 +87,12 @@ namespace FileUpload.Controllers
         public bool IsFileExAcceptable(string ex)
         {
             //做文件类型验证 文件后缀名统一为小写
-            
+
             //gif,jpg,jpeg,bmp,png
             if (ex != ".gif" && ex != ".jpg" && ex != ".jpeg" && ex != ".bmp" && ex != ".png")
             {
                 //文件后缀不符合要求
-               
+
                 return false;
             }
             else
@@ -163,6 +133,6 @@ namespace FileUpload.Controllers
             }
         }
 
-        
+
     }
 }
